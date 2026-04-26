@@ -1,3 +1,14 @@
+> [!NOTE]
+> **This is a fork of [`watercrawl/watercrawl`](https://github.com/watercrawl/watercrawl) that adds a SearXNG search backend** as an alternative to the upstream Google CSE backend.
+>
+> Set `SCRAPY_SEARCH_BACKEND=SearXNGSearchScrapper` and `SCRAPY_SEARXNG_URL=<your-searxng-url>` in `docker/.env` to activate it.
+>
+> Full setup, configuration, and troubleshooting: **[SEARXNG.md](./SEARXNG.md)**.
+>
+> The SearXNG patch lives on the [`custom/searxng-support`](https://github.com/bradjohnl/watercrawl/tree/custom/searxng-support) branch (default).
+
+---
+
 ![Water Crawl](https://raw.githubusercontent.com/watercrawl/WaterCrawl/5bb91dcb07a619469688372444e27dc3deab185b/assets/banner.png)
 
 <div align="center">
