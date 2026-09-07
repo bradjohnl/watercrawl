@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Team, TeamMember, TeamInvitation, TeamAPIKey
+
+from .models import Team, TeamAPIKey, TeamInvitation, TeamMember, User
 
 
 class TeamMemberInline(admin.TabularInline):

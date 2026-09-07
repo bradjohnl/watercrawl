@@ -1,6 +1,6 @@
-import uuid
-import platform
 import hashlib
+import platform
+import uuid
 
 
 def generate_system_anonymous_information():
