@@ -1,37 +1,39 @@
-from rest_framework import mixins
-from drf_spectacular.utils import extend_schema, extend_schema_view
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import mixins, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.views import (
     TokenRefreshView as BaseTokenRefreshView,
+)
+from rest_framework_simplejwt.views import (
     TokenVerifyView as BaseTokenVerifyView,
 )
 
 from common.permissions import CanInstall
 from user import serializers
-from .decorators import setup_current_team
 from user.services import (
-    TeamService,
-    UserService,
-    oauth_service_factory,
     ForgotPasswordService,
     TeamInvitationService,
+    TeamService,
+    UserService,
     VerificationService,
+    oauth_service_factory,
 )
-from .models import TeamMember, TeamInvitation
-from .permissions import IsAuthenticatedTeam, CanSignup, CanLogin
+
+from .decorators import setup_current_team
+from .models import TeamInvitation, TeamMember
+from .permissions import CanLogin, CanSignup, IsAuthenticatedTeam
 from .tasks import (
+    send_analytics_confirmation,
     send_forget_password_email,
     send_invitation_email,
-    send_verification_email,
     send_newsletter_confirmation,
-    send_analytics_confirmation,
+    send_verification_email,
 )
 
 

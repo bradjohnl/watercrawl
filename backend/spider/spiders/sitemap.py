@@ -1,16 +1,15 @@
 import gzip
-from typing import Iterable
 import re
-from urllib.parse import urlparse, urljoin
+from collections.abc import Iterable
+from urllib.parse import urljoin, urlparse
 
 from lxml import etree
 from scrapy import Request, signals
 
-from spider.spiders import SentryCaptureSpider
-
-from core.services import SitemapRequestService, BasePubSupService
+from core.services import BasePubSupService, SitemapRequestService
 from spider import settings
 from spider.items import SitemapResult
+from spider.spiders import SentryCaptureSpider
 
 
 class SitemapScrapper(SentryCaptureSpider):
@@ -249,7 +248,7 @@ class SitemapScrapper(SentryCaptureSpider):
                 )
                 content = gzip.decompress(content)
             except Exception as e:
-                self.log(f"Failed to decompress gzipped sitemap: {str(e)}")
+                self.log(f"Failed to decompress gzipped sitemap: {e!s}")
                 yield from self.check_next_sitemap()
                 return
 
@@ -285,7 +284,7 @@ class SitemapScrapper(SentryCaptureSpider):
                 self.log(f"Extracted {urls_found} URLs from sitemap {response.url}")
 
         except Exception as e:
-            self.log(f"Error parsing sitemap {response.url}: {str(e)}")
+            self.log(f"Error parsing sitemap {response.url}: {e!s}")
 
         # Process the next sitemap
         yield from self.check_next_sitemap()
@@ -460,4 +459,4 @@ class SitemapScrapper(SentryCaptureSpider):
                 )
 
         except Exception as e:
-            self.log(f"Error parsing Google search results: {str(e)}")
+            self.log(f"Error parsing Google search results: {e!s}")

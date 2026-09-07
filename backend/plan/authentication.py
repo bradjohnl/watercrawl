@@ -1,8 +1,8 @@
+from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 from rest_framework import authentication
 from rest_framework.exceptions import AuthenticationFailed
-from django.utils.translation import gettext_lazy as _
-from stripe import Webhook, SignatureVerificationError
-from django.conf import settings
+from stripe import SignatureVerificationError, Webhook
 
 
 class StripeSignatureAuthentication(authentication.BaseAuthentication):

@@ -1,6 +1,6 @@
 import json
+from collections.abc import Generator
 from functools import cached_property
-from typing import Generator
 
 import html2text
 from django.conf import settings
