@@ -1,6 +1,7 @@
 import time
-from redis import Redis
+
 from django.conf import settings
+from redis import Redis
 
 connection = Redis(
     host=settings.REDIS_LOCKER_CONFIG["HOST"],

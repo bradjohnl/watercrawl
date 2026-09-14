@@ -1,13 +1,12 @@
-from typing import Iterable
+from collections.abc import Iterable
 
 from scrapy import Request, signals
 
-from spider.spiders import SentryCaptureSpider
-
 from core import consts
-from core.services import SearchService, BasePubSupService
+from core.services import BasePubSupService, SearchService
 from spider import settings
 from spider.items import SearchResult
+from spider.spiders import SentryCaptureSpider
 
 
 class SearchScrapper(SentryCaptureSpider):

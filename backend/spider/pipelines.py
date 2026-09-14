@@ -1,13 +1,12 @@
 import hashlib
+import logging
 import re
 
 from asgiref.sync import sync_to_async
-import logging
-
 from scrapy import signals
 
 from .helpers import HtmlFilter, HtmlToMarkdown
-from .items import ScrapedItem, LinkItem, SearchResult, SitemapResult
+from .items import LinkItem, ScrapedItem, SearchResult, SitemapResult
 from .spiders.google_search import SearchScrapper
 from .spiders.scraper import SiteScrapper
 from .spiders.sitemap import SitemapScrapper
@@ -61,8 +60,7 @@ class SiteScrapperPipeline:
     def make_url_hash(cls, url):
         url = url.split("#")[0]
         url = url.strip()
-        if url.endswith("/"):
-            url = url[:-1]
+        url = url.removesuffix("/")
         return hashlib.md5(url.encode()).hexdigest()
 
     def process_item(self, item, spider):
@@ -106,7 +104,7 @@ class SiteScrapperPipeline:
 
             return item
         except Exception as e:
-            self.logger.error(f"Error processing item {item}: {str(e)}")
+            self.logger.error(f"Error processing item {item}: {e!s}")
             return item
 
     async def save_sitemap(self, spider: SiteScrapper):
