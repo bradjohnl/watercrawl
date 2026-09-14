@@ -5,14 +5,14 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from common.encryption import encrypt_key, decrypt_key
+from common.encryption import decrypt_key, encrypt_key
 from core import consts
 from core.models import (
     CrawlRequest,
     CrawlResult,
     CrawlResultAttachment,
-    SearchRequest,
     ProxyServer,
+    SearchRequest,
     SitemapRequest,
 )
 from core.services import ProxyService
@@ -349,7 +349,7 @@ class TestProxySerializer(serializers.Serializer):
 
     def validate(self, attrs):
         team = self.context["team"]
-        if "slug" in attrs and attrs["slug"]:
+        if attrs.get("slug"):
             proxy = ProxyServer.objects.filter(team=team, slug=attrs["slug"]).first()
             if not proxy:
                 raise serializers.ValidationError(
