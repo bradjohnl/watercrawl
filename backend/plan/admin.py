@@ -1,10 +1,11 @@
 from django.contrib import admin
+
 from .models import (
     Plan,
     PlanFeature,
+    StripeWebhookHistory,
     Subscription,
     SubscriptionPayment,
-    StripeWebhookHistory,
     UsageHistory,
 )
 

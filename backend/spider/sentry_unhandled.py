@@ -1,15 +1,13 @@
 import sentry_sdk
-
 from scrapy import signals
 from scrapy.exceptions import (
-    IgnoreRequest,
     CloseSpider,
     DropItem,
+    IgnoreRequest,
 )
 from scrapy.spidermiddlewares.httperror import HttpError
-from twisted.internet.error import DNSLookupError, TimeoutError, TCPTimedOutError
+from twisted.internet.error import DNSLookupError, TCPTimedOutError, TimeoutError
 from twisted.web._newclient import ResponseNeverReceived
-
 
 IGNORED_EXCEPTIONS = (
     HttpError,  # HTTP 4xx / 5xx

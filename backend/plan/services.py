@@ -1,23 +1,23 @@
 import datetime
 import json
 from abc import ABC, abstractmethod
-import stripe
-from django.db.transaction import atomic
 
-from django.utils.translation import gettext_lazy as _
+import stripe
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.db.transaction import atomic
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import PermissionDenied
 
-from core.models import CrawlRequest, SearchRequest
 from core import consts as core_consts
+from core.models import CrawlRequest, SearchRequest
 from plan import consts
 from plan.models import (
     Plan,
+    StripeWebhookHistory,
     Subscription,
     SubscriptionPayment,
-    StripeWebhookHistory,
     UsageHistory,
 )
 from plan.utils import (
@@ -234,7 +234,7 @@ class TeamPlanEnterpriseService(TeamPlanAbstractService, ABC):
     @property
     def remain_number_users(self):
         remain = self.subscription.plan.number_of_users - self.team.team_members.count()
-        return 0 if remain < 0 else remain
+        return max(remain, 0)
 
     @property
     def remaining_page_credit(self):
@@ -499,9 +499,10 @@ class StripeService:
             self._handle_checkout_session_completed(event_data)
         elif event_type == "customer.subscription.created":
             self._handle_subscription_created(event_data)
-        elif event_type == "customer.subscription.updated":
-            self._handle_subscription_updated(event_data)
-        elif event_type == "customer.subscription.deleted":
+        elif (
+            event_type == "customer.subscription.updated"
+            or event_type == "customer.subscription.deleted"
+        ):
             self._handle_subscription_updated(event_data)
         elif event_type == "invoice.payment_succeeded":
             self._handle_payment_succeeded(event_data)
@@ -620,7 +621,7 @@ class StripeService:
 
             return session.url
         except Exception as e:
-            raise ValidationError(f"Failed to create checkout session: {str(e)}")
+            raise ValidationError(f"Failed to create checkout session: {e!s}")
 
     def start_freemium_plan(self, plan: Plan, current_team: Team):
         existing_subscription = SubscriptionService.get_current_subscription(
