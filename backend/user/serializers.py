@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
 
-from user.models import User, Team, TeamAPIKey, TeamMember, TeamInvitation
+from user.models import Team, TeamAPIKey, TeamInvitation, TeamMember, User
 
 
 class RegisterSerializer(serializers.ModelSerializer):

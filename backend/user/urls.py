@@ -2,21 +2,21 @@ from django.urls.conf import path
 from rest_framework.routers import DefaultRouter
 
 from user.views import (
-    RegisterView,
-    ProfileView,
-    TeamViewSet,
-    LogingView,
     APIKeyViewSet,
     CurrentTeamMembersView,
-    OauthAPIView,
     ForgotPasswordView,
-    ResetPasswordView,
+    InstallView,
+    LogingView,
     MyInvitationsView,
-    VerifyEmailView,
+    OauthAPIView,
+    ProfileView,
+    RegisterView,
+    RequestEmailVerificationView,
+    ResetPasswordView,
+    TeamViewSet,
     TokenRefreshView,
     TokenVerifyView,
-    RequestEmailVerificationView,
-    InstallView,
+    VerifyEmailView,
     VerifyInvitation,
 )
 
