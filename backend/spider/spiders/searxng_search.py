@@ -1,9 +1,9 @@
-from typing import Iterable
+from collections.abc import Iterable
 
 from scrapy import Request
 
-from spider.spiders.google_search import SearchScrapper
 from spider import settings
+from spider.spiders.google_search import SearchScrapper
 
 
 class SearXNGSearchScrapper(SearchScrapper):
@@ -14,7 +14,7 @@ class SearXNGSearchScrapper(SearchScrapper):
 
     # SearXNG time range mapping (WaterCrawl -> SearXNG format)
     TIME_RANGE_MAP = {
-        "h1": "day",     # Last hour -> day (SearXNG minimum)
+        "h1": "day",  # Last hour -> day (SearXNG minimum)
         "d1": "day",
         "w1": "week",
         "m1": "month",
@@ -33,9 +33,7 @@ class SearXNGSearchScrapper(SearchScrapper):
             params["language"] = self.helpers.language
 
         if self.helpers.time_range:
-            mapped = self.TIME_RANGE_MAP.get(
-                self.helpers.time_range[0], None
-            )
+            mapped = self.TIME_RANGE_MAP.get(self.helpers.time_range[0], None)
             if mapped:
                 params["time_range"] = mapped
 

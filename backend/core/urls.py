@@ -4,11 +4,11 @@ from rest_framework.routers import DefaultRouter
 from core.views import (
     CrawlRequestView,
     CrawlResultView,
-    UsageAPIView,
     PluginAPIView,
-    SearchRequestAPIView,
     ProxyServerView,
+    SearchRequestAPIView,
     SitemapRequestView,
+    UsageAPIView,
 )
 
 router = DefaultRouter()
