@@ -66,7 +66,7 @@ class Plan(BaseModel):
     def save(self, *args, **kwargs):
         if self.is_default:
             Plan.objects.all().update(is_default=False)
-        super(Plan, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class PlanFeature(BaseModel):
