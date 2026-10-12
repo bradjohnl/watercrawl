@@ -1,37 +1,30 @@
 import importlib
-from typing import Type, List
 
 from django.conf import settings
 from watercrawl_plugin import AbstractPlugin
 
 
 def generate_crawl_result_file_path(instance, filename):
-    return "crawls/{}/results/{}.json".format(instance.request_id, instance.pk)
+    return f"crawls/{instance.request_id}/results/{instance.pk}.json"
 
 
 def generate_crawl_result_attachment_path(instance, filename):
-    return "crawls/{}/results/{}/attachments/{}".format(
-        instance.crawl_result.request_id, instance.crawl_result.uuid, filename
-    )
+    return f"crawls/{instance.crawl_result.request_id}/results/{instance.crawl_result.uuid}/attachments/{filename}"
 
 
 def search_result_file_path(instance, filename):
-    return "searches/{}/result.json".format(
-        instance.uuid,
-    )
+    return f"searches/{instance.uuid}/result.json"
 
 
 def sitemap_result_file_path(instance, filename):
-    return "sitemaps/{}/result.json".format(
-        instance.uuid,
-    )
+    return f"sitemaps/{instance.uuid}/result.json"
 
 
 def generate_crawl_request_sitemap_path(instance, filename):
-    return "crawls/{}/sitemap.json".format(instance.uuid)
+    return f"crawls/{instance.uuid}/sitemap.json"
 
 
-def get_active_plugins() -> List[Type["AbstractPlugin"]]:
+def get_active_plugins() -> list[type["AbstractPlugin"]]:
     """
     Get a list of active plugins
     :return: AbstractPlugin[]
