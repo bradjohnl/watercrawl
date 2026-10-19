@@ -11,7 +11,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from common.services import EmailService
 from locker import redis_lock
-from user.models import User, Team, TeamAPIKey, TeamInvitation
+from user.models import Team, TeamAPIKey, TeamInvitation, User
 from user.utils import generate_random_api_key
 
 
