@@ -4,9 +4,9 @@ from django.utils.translation import gettext_lazy as _
 from common.models import BaseModel
 from core import consts
 from core.utils import (
-    generate_crawl_result_file_path,
-    generate_crawl_result_attachment_path,
     generate_crawl_request_sitemap_path,
+    generate_crawl_result_attachment_path,
+    generate_crawl_result_file_path,
     search_result_file_path,
     sitemap_result_file_path,
 )
