@@ -1,5 +1,6 @@
 import os
 import sys
+
 import django
 from django.conf import settings
 
@@ -140,7 +141,9 @@ GOOGLE_CSE_ID = settings.SCRAPY_GOOGLE_CSE_ID
 
 SEARXNG_URL = getattr(settings, "SCRAPY_SEARXNG_URL", "http://localhost:4000")
 SEARXNG_SEARCH_PAGE_LIMIT = getattr(settings, "SCRAPY_SEARXNG_SEARCH_PAGE_LIMIT", 3)
-SEARCH_BACKEND = getattr(settings, "SCRAPY_SEARCH_BACKEND", "GoogleCustomSearchScrapper")
+SEARCH_BACKEND = getattr(
+    settings, "SCRAPY_SEARCH_BACKEND", "GoogleCustomSearchScrapper"
+)
 
 MAX_NUMBER_OF_SITEMAP_URLS = settings.SCRAPY_MAX_NUMBER_OF_SITEMAP_URLS
 SITEMAP_CRAWL_PAGE_LIMIT = settings.SCRAPY_SITEMAP_CRAWL_PAGE_LIMIT

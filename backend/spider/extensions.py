@@ -1,4 +1,4 @@
-from scrapy import signals, Request, Spider
+from scrapy import Request, Spider, signals
 from scrapy.http import Response
 
 

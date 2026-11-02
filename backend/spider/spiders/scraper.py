@@ -1,13 +1,12 @@
-from typing import Iterable
+from collections.abc import Iterable
 
 from scrapy import Request, signals
-
-from spider.spiders import SentryCaptureSpider
 from scrapy.exceptions import IgnoreRequest
 
-from core.services import CrawlerService, CrawlHelpers, BasePubSupService
+from core.services import BasePubSupService, CrawlerService, CrawlHelpers
 from spider import settings
-from spider.items import ScrapedItem, LinkItem
+from spider.items import LinkItem, ScrapedItem
+from spider.spiders import SentryCaptureSpider
 
 
 class SiteScrapper(SentryCaptureSpider):
@@ -54,7 +53,7 @@ class SiteScrapper(SentryCaptureSpider):
 
     def start_requests(self) -> Iterable[Request]:
         for url in self.crawler_service.crawl_request.urls:
-            self.pubsub_service.send_feed("Starting crawl for URL: {}".format(url))
+            self.pubsub_service.send_feed(f"Starting crawl for URL: {url}")
             yield Request(
                 url=url,
                 callback=self.parse,
@@ -74,7 +73,7 @@ class SiteScrapper(SentryCaptureSpider):
         )
 
     def parse(self, response, **kwargs):
-        self.pubsub_service.send_feed("Parsing response from: {}".format(response.url))
+        self.pubsub_service.send_feed(f"Parsing response from: {response.url}")
         result_links = []
         for a_tag in response.css("a"):
             link = a_tag.css("::attr(href)").get()
