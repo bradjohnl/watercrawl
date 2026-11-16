@@ -1,13 +1,12 @@
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema_view, extend_schema
-from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.generators import SchemaGenerator
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.views import SpectacularAPIView
 from rest_framework.permissions import IsAuthenticated
-
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from common import serializers, docs
+from common import docs, serializers
 from common.services import FrontendSettingService
 from user.permissions import IsAuthenticatedTeam
 

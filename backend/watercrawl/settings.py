@@ -375,7 +375,9 @@ SCRAPY_GOOGLE_SEARCH_PAGE_LIMIT = env(
 )
 
 # SearXNG search backend
-SCRAPY_SEARXNG_URL = env("SCRAPY_SEARXNG_URL", cast=str, default="http://localhost:4000")
+SCRAPY_SEARXNG_URL = env(
+    "SCRAPY_SEARXNG_URL", cast=str, default="http://localhost:4000"
+)
 SCRAPY_SEARXNG_SEARCH_PAGE_LIMIT = env(
     "SCRAPY_SEARXNG_SEARCH_PAGE_LIMIT", cast=int, default=3
 )

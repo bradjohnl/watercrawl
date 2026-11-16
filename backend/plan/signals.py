@@ -2,8 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.dispatch import receiver
 
-from core.models import CrawlRequest, SearchRequest, SitemapRequest
 from core import consts as core_consts
+from core.models import CrawlRequest, SearchRequest, SitemapRequest
 from plan.services import UsageHistoryService
 
 

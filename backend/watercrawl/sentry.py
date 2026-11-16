@@ -2,8 +2,9 @@ from sentry_sdk import init as sentry_sdk_init
 
 
 def init_sentry():
-    from . import __version__
     from django.conf import settings
+
+    from . import __version__
 
     if not settings.SENTRY_DSN:
         return

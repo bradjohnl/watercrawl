@@ -20,8 +20,8 @@ from django.urls import path
 from django.urls.conf import include
 from drf_spectacular.views import (
     SpectacularAPIView,
-    SpectacularSwaggerView,
     SpectacularRedocView,
+    SpectacularSwaggerView,
 )
 
 from common.views import TeamSchemaView
