@@ -5,7 +5,7 @@ from scrapy import signals
 from scrapy.exceptions import IgnoreRequest
 from scrapy.http import HtmlResponse
 
-from core.services import CrawlHelpers, BasePubSupService
+from core.services import BasePubSupService, CrawlHelpers
 
 
 class PlaywrightMiddleware:
@@ -42,7 +42,7 @@ class PlaywrightMiddleware:
             )
             return
 
-        if "skip_playwright" in request.meta and request.meta["skip_playwright"]:
+        if request.meta.get("skip_playwright"):
             spider.logger.info("Skipping Playwright for request: %s", request.url)
             return
 
@@ -140,14 +140,14 @@ class LimitRequestsMiddleware:
 
     def process_request(self, request, spider):
         if "robots.txt" in request.url:
-            return None
+            return
         if "robot.txt" in request.url:
-            return None
+            return
         if self.dispatched >= self.max_requests:
             raise IgnoreRequest("Maximum requests reached")
 
         self.dispatched += 1
-        return None  # let it continue
+        return  # let it continue
 
     def process_response(self, request, response, spider):
         return response

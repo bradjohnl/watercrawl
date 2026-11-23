@@ -26,8 +26,8 @@ from core import consts
 from core.models import (
     CrawlRequest,
     CrawlResult,
-    SearchRequest,
     ProxyServer,
+    SearchRequest,
     SitemapRequest,
 )
 from core.utils import get_active_plugins
@@ -76,10 +76,9 @@ class CrawlHelpers(BaseHelpers):
         )
         if not allowed_domains:
             domain = parsed_url.netloc
-            if domain.startswith("www."):
-                domain = domain[4:]
+            domain = domain.removeprefix("www.")
 
-            allowed_domains = ["*.{}".format(domain), domain]
+            allowed_domains = [f"*.{domain}", domain]
 
         return allowed_domains
 
@@ -105,19 +104,15 @@ class CrawlHelpers(BaseHelpers):
 
         return [
             "-s",
-            "DEPTH_LIMIT={}".format(max_depth),
+            f"DEPTH_LIMIT={max_depth}",
             "-s",
-            "MAX_REQUESTS={}".format(page_limit),  # +2 for the robots.txt
+            f"MAX_REQUESTS={page_limit}",  # +2 for the robots.txt
             "-s",
-            "CONCURRENT_REQUESTS={}".format(str(concurrent_requests)),
+            f"CONCURRENT_REQUESTS={concurrent_requests!s}",
             "-s",
-            "CONCURRENT_REQUESTS_PER_DOMAIN={}".format(
-                str(settings.SCRAPY_CONCURRENT_REQUESTS_PER_DOMAIN)
-            ),
+            f"CONCURRENT_REQUESTS_PER_DOMAIN={settings.SCRAPY_CONCURRENT_REQUESTS_PER_DOMAIN!s}",
             "-s",
-            "CONCURRENT_REQUESTS_PER_IP={}".format(
-                str(settings.SCRAPY_CONCURRENT_REQUESTS_PER_IP)
-            ),
+            f"CONCURRENT_REQUESTS_PER_IP={settings.SCRAPY_CONCURRENT_REQUESTS_PER_IP!s}",
         ]
 
     @cached_property
@@ -303,12 +298,11 @@ class SitemapHelpers(BaseHelpers):
     def domain(self) -> str:
         parsed_url = urlparse(self.sitemap_request.url)
         domain = parsed_url.netloc
-        if domain.startswith("www."):
-            domain = domain[4:]
+        domain = domain.removeprefix("www.")
         return domain
 
     @cached_property
-    def search_value(self) -> Optional[str]:
+    def search_value(self) -> str | None:
         search_value = self.sitemap_request.options.get("search", "")
         return search_value.strip().lower() if search_value else None
 
@@ -321,8 +315,8 @@ class SitemapHelpers(BaseHelpers):
     @cached_property
     def search_query(self) -> str:
         if self.search_value:
-            return "site:{} {}".format(self.domain, self.search_value)
-        return "site:{}".format(self.domain)
+            return f"site:{self.domain} {self.search_value}"
+        return f"site:{self.domain}"
 
     @cached_property
     def ignore_sitemap_xml(self):
@@ -339,8 +333,7 @@ class SitemapHelpers(BaseHelpers):
     def is_allowed_domain(self, url):
         parsed_url = urlparse(url)
         host = parsed_url.netloc
-        if host.startswith("www."):
-            host = host[4:]
+        host = host.removeprefix("www.")
 
         if self.domain == host:
             return True
@@ -473,7 +466,7 @@ class BasePubSupService:
                 {
                     "event_type": "feed",
                     "payload": {
-                        "id": "{}".format(time()),
+                        "id": f"{time()}",
                         "type": feed_type,
                         "message": message,
                         "timestamp": timezone.now().isoformat(),
@@ -496,8 +489,8 @@ class CrawlPupSupService(BasePubSupService):
         If no new data comes from Redis, it sends crawl status every 5 seconds.
         """
         from .serializers import (
-            CrawlResultSerializer,
             CrawlRequestSerializer,
+            CrawlResultSerializer,
             FullCrawlResultSerializer,
         )
 
@@ -563,7 +556,7 @@ class CrawlPupSupService(BasePubSupService):
                         }
                 except Exception as e:
                     # Log error but continue
-                    print(f"Error processing Redis message: {str(e)}")
+                    print(f"Error processing Redis message: {e!s}")
 
             # Check if we need to send state update
             current_time = time()
@@ -601,8 +594,8 @@ class SearchPupSupService(BasePubSupService):
 
     def check_status(self, prefetched=False):
         from .serializers import (
-            SearchRequestSerializer,
             FullSearchResultSerializer,
+            SearchRequestSerializer,
         )
 
         ResultSerializer = (
@@ -650,7 +643,7 @@ class SearchPupSupService(BasePubSupService):
 
                 except Exception as e:
                     # Log error but continue
-                    print(f"Error processing Redis message: {str(e)}")
+                    print(f"Error processing Redis message: {e!s}")
 
         # Send final state
         self.search_request.refresh_from_db()
@@ -672,8 +665,8 @@ class SitemapPubSupService(BasePubSupService):
 
     def check_status(self, prefetched=False):
         from .serializers import (
-            SitemapRequestSerializer,
             FullSitemapRequestSerializer,
+            SitemapRequestSerializer,
         )
 
         ResultSerializer = (
@@ -723,7 +716,7 @@ class SitemapPubSupService(BasePubSupService):
 
                 except Exception as e:
                     # Log error but continue
-                    print(f"Error processing Redis message: {str(e)}")
+                    print(f"Error processing Redis message: {e!s}")
 
             else:
                 # Check if we need to send state update
@@ -761,8 +754,8 @@ class CrawlerService:
         cls,
         urls: list[str],
         team: Team,
-        spider_options: Optional[dict] = None,
-        page_options: Optional[dict] = None,
+        spider_options: dict | None = None,
+        page_options: dict | None = None,
     ):
         page_options = page_options or {}
         spider_options = spider_options or {}
